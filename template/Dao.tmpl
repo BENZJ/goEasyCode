@@ -1,0 +1,24 @@
+@Repository
+public interface {{.ClassName}}Mapper {
+
+    /**
+     * 批量单条记录
+     */
+    void insert({{.ClassName}}DO item);
+
+    /**
+     * 批量插入
+     */
+    void batchInsert(List<{{.ClassName}}DO> list);
+
+    /**
+     * 根据id查询
+     */
+    {{.ClassName}}DO queryById(Long id);
+
+    /**
+     * 根据id查询
+     */
+    int update({{.ClassName}}DO item);
+
+}

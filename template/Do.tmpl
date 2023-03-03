@@ -1,0 +1,10 @@
+
+@Data
+public class {{.ClassName}}DO{
+    {{range .Columns}}
+    /**
+    * {{.ColumnComment}}
+    */
+    private {{.Type}} {{.ColumnName}}
+    {{end}}
+}
