@@ -74,7 +74,7 @@ const MapperTempl = `
         {{range  $key,$value := .Columns}}{{if (eq $key 0)}}{{- print $value.RealColumnName}}{{else}},{{- print $value.RealColumnName}}{{- end}}{{- end}}
         )
         values (
-             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{item.{{- print  $value.RealColumnName }}}{{else}},#{item.{{- print $value.ColumnName}}}{{- end}}{{- end}}
+             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{ {{- print  $value.RealColumnName }}}{{else}},#{ {{- print $value.ColumnName}}}{{- end}}{{- end}}
         )
     </insert>
 
