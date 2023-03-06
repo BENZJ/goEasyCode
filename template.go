@@ -20,7 +20,7 @@ public interface {{.ClassName}}Mapper {
     /**
      * 批量单条记录
      */
-    void insert({{.ClassName}}DO item);
+    Integer insert({{.ClassName}}DO item);
 
     /**
      * 批量插入
@@ -35,7 +35,7 @@ public interface {{.ClassName}}Mapper {
     /**
      * 根据id查询
      */
-    int update({{.ClassName}}DO item);
+    Integer update({{.ClassName}}DO item);
 
 }
 `
@@ -55,7 +55,7 @@ const MapperTempl = `
         {{range  $key,$value := .Columns}}{{if (eq $key 0)}}{{- print $value.RealColumnName}}{{else}},{{- print $value.RealColumnName}}{{- end}}{{- end}}
     </sql>
 
-    <!-批量插入-->
+    <!-- 批量插入-->
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO {{.TableName}} (
         {{range  $key,$value := .Columns}}{{if (eq $key 0)}}{{- print $value.RealColumnName}}{{else}},{{- print $value.RealColumnName}}{{- end}}{{- end}}
@@ -68,7 +68,7 @@ const MapperTempl = `
         </foreach>
     </insert>
 
-    <!-插入-->
+    <!-- 插入-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into {{.TableName}}(
         {{range  $key,$value := .Columns}}{{if (eq $key 0)}}{{- print $value.RealColumnName}}{{else}},{{- print $value.RealColumnName}}{{- end}}{{- end}}
@@ -79,20 +79,27 @@ const MapperTempl = `
     </insert>
 
 
-    <!-通过主键更新-->
+    <!--通过主键更新-->
     <update id="update">
         update {{.TableName}}
         <set>
         {{- range  $key,$value := .Columns}}
+        {{- if eq .Type "String" }}
             <if test="{{.RealColumnName}} != null and {{.RealColumnName}}  != '' ">
-                {{.RealColumnName}} = #{ {{- .RealColumnName}} },
+                {{ .RealColumnName}} = #{ {{- .RealColumnName}} },
             </if>
+        {{- else}}
+            <if test="{{.RealColumnName}} != null ">
+                {{ .RealColumnName}} = #{ {{- .RealColumnName}} },
+            </if>
+        {{- end}}
         {{- end}}    
         </set>
         where ID = #{id}
     </update>
 
-    <select id="selectById"  resultType="com.ctsec.org.wealth.dataobj.active.ActiveReportInfoDO">
+    <!--根据id查询-->
+    <select id="queryById"  resultType="com.ctsec.org.wealth.dataobj.active.ActiveReportInfoDO">
         select <include refid="BaseColumnList"/>
         from {{.TableName}} where id = #{id}
     </select>
