@@ -63,7 +63,7 @@ const MapperTempl = `
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
-             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{item.{{- print  $value.RealColumnName }}}{{else}},#{item.{{- print $value.RealColumnName}}}{{- end}}{{- end}}
+             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{item.{{- print  $value.RealColumnName }}}{{else}},#{item.{{- print $value.ColumnName}}}{{- end}}{{- end}}
             )
         </foreach>
     </insert>
@@ -74,7 +74,7 @@ const MapperTempl = `
         {{range  $key,$value := .Columns}}{{if (eq $key 0)}}{{- print $value.RealColumnName}}{{else}},{{- print $value.RealColumnName}}{{- end}}{{- end}}
         )
         values (
-             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{item.{{- print  $value.RealColumnName }}}{{else}},#{item.{{- print $value.RealColumnName}}}{{- end}}{{- end}}
+             {{range  $key,$value := .Columns}}{{if (eq $key 0)}}#{item.{{- print  $value.RealColumnName }}}{{else}},#{item.{{- print $value.ColumnName}}}{{- end}}{{- end}}
         )
     </insert>
 
@@ -86,11 +86,11 @@ const MapperTempl = `
         {{- range  $key,$value := .Columns}}
         {{- if eq .Type "String" }}
             <if test="{{.RealColumnName}} != null and {{.RealColumnName}}  != '' ">
-                {{ .RealColumnName}} = #{ {{- .RealColumnName}} },
+                {{ .RealColumnName}} = #{ {{- .ColumnName}} },
             </if>
         {{- else}}
             <if test="{{.RealColumnName}} != null ">
-                {{ .RealColumnName}} = #{ {{- .RealColumnName}} },
+                {{ .RealColumnName}} = #{ {{- .ColumnName}} },
             </if>
         {{- end}}
         {{- end}}    
